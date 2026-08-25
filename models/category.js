@@ -1,5 +1,33 @@
 const mongoose= require('mongoose')
 
+const formFieldSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+
+  label: {
+    type: String,
+    required: true
+  },
+
+  type: {
+    type: String,
+    enum: ["text", "number", "select", "textarea", "date", "file", "tel"],
+    required: true
+  },
+
+  required: {
+    type: Boolean,
+    default: false
+  },
+
+  options: {
+    type: [String],
+    default: []
+  }
+});
+
 const subcategorySchema = new mongoose.Schema({
   name: {
     type: String,
@@ -10,6 +38,10 @@ const subcategorySchema = new mongoose.Schema({
     type: String,
     default: "",
     trim: true
+  },
+  formFields: {
+    type: [formFieldSchema],
+    default: []
   }
 });
 

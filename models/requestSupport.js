@@ -6,10 +6,6 @@ const requestSupportSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        description: {
-            type: String,
-            required: true
-        },
         priority: {
             type: String,
             enum: ["Low", "Medium", "High", "Urgent"],
@@ -17,7 +13,7 @@ const requestSupportSchema = new mongoose.Schema(
         },
         Status: {
             type: String,
-            enum: ['New',"In progress", "Resolved", "Closed"],
+            enum: ['New', "In progress", "Resolved", "Closed"],
             default: 'New'
         },
         attachments: {
@@ -37,6 +33,14 @@ const requestSupportSchema = new mongoose.Schema(
         category: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Category",
+            required: true
+        },
+        subcategoryId: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true
+        },
+        requestDetails: {
+            type: mongoose.Schema.Types.Mixed,
             required: true
         },
         replies: [
@@ -71,9 +75,9 @@ const requestSupportSchema = new mongoose.Schema(
         ]
 
 
-    },{timestamps: true}
+    }, { timestamps: true }
 )
 
-const Request = mongoose.model("Request", requestSupportSchema )
+const Request = mongoose.model("Request", requestSupportSchema)
 
-module.exports= Request
+module.exports = Request

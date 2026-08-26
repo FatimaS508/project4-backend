@@ -51,8 +51,10 @@ const categorySchema= new mongoose.Schema({
         required: true
     },
     about:{type: String},
-    subcategories:[ subcategorySchema],
+  subcategories: {
+    type: [subcategorySchema],
     default: []
+  }
 })
 
 const Category= mongoose.model("Category", categorySchema)

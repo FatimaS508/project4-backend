@@ -15,4 +15,24 @@ async function getCategoryById(req,res) {
     
 }
 
-module.exports={getAllCategories, getCategoryById}
+async function getSubcategoryById(req, res) {
+  try {
+    const { scategoryId } = req.params;
+
+    const category = await Category.findOne({
+      "subcategories._id": scategoryId
+    });
+
+    if (!category) {
+      return res.status(404).json({
+        message: "Subcategory not found"});
+    }
+
+    const scategory = category.subcategories.id(scategoryId);
+
+    res.status(200).json({categoryId: category._id,scategory});
+  }catch (err) {
+    res.status(500).json({ message: err.message});
+  }
+}
+module.exports={getAllCategories, getCategoryById, getSubcategoryById}

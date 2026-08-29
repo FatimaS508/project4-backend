@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 async function signUp(req, res) {
   try {
-    const { username, password } = req.body;
+    const { username, password, role } = req.body;
 
     // Validation
     if (!username || !password) return res.status(400).json({message: "Username and password are required.",});
@@ -13,6 +13,7 @@ async function signUp(req, res) {
     const user = await User.create({
       username,
       hashedPassword: await bcrypt.hash(password, 12),
+      role
     });
 
     const { _id, createdAt, updatedAt } = user;
@@ -63,17 +64,18 @@ async function signIn(req, res) {
     }
 
     // Construct the payload
-    const payload = { username: user.username, _id: user._id };
+    const payload = { username: user.username, _id: user._id, role: user.role };
 
 
     const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "1d",
     });
     return res.status(200).json({
       accessToken,
       user: {
         _id: user._id,
         username: user.username,
+        role: user.role
       },
     });
   } catch (err) {
@@ -98,6 +100,7 @@ async function verifyUser(req, res) {
     return res.status(200).json({
         _id: user._id,
         username: user.username,
+        role:user.role
     });
   } catch (err) {
     console.error(err);

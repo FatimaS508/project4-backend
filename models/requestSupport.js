@@ -1,5 +1,37 @@
 const mongoose = require('mongoose')
 
+const replySchema = new mongoose.Schema(
+  {
+    message: {
+      type: String,
+      trim: true,
+      required: true
+    },
+
+    sender: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    },
+
+    attachments: [
+      {
+        url: {
+          type: String,
+          required: true
+        },
+        fileType: {
+          type: String,
+          enum: ["image", "document", "audio"],
+          required: true
+        },
+        fileName: String
+      }
+    ]
+  },
+  { timestamps: true }
+);
+
 const requestSupportSchema = new mongoose.Schema(
     {
         title: {
@@ -43,36 +75,7 @@ const requestSupportSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.Mixed,
             required: true
         },
-        replies: [
-            {
-                message: {
-                    type: String
-                },
-                sender: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "User",
-                    required: true
-                },
-                attachments: [
-                    {
-                        url: {
-                            type: String,
-                            required: true
-                        },
-                        fileType: {
-                            type: String,
-                            enum: ["image", "document", "audio"],
-                            required: true
-                        },
-                        fileName: String
-                    }
-                ],
-                createdAt: {
-                    type: Date,
-                    default: Date.now
-                }
-            }
-        ]
+        replies: [replySchema]
 
 
     }, { timestamps: true }

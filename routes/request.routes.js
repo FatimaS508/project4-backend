@@ -11,6 +11,10 @@ router.get('/', verifyToken, requestController.getAllRequests)
 router.get('/:id', verifyToken, requestController.getRequestById)
 router.post("/", verifyToken, requestController.createRequest);
 
+router.post('/:requestId/replies', verifyToken, requestController.replyToRequest)
+router.get('/:requestId/replies', verifyToken, requestController.replyToRequest)
+
+
 
 
 

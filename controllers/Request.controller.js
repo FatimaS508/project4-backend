@@ -116,9 +116,10 @@ async function deleteRequest(req, res) {
 async function getAllRequests(req, res) {
   try {
     const requests = await Request.find()
-      .populate("createdBy", "username")
-      .populate("assignedTo", "username")
+      .populate("createdBy", "username role")
+      .populate("assignedTo", "username role")
       .populate("category", "name")
+      .populate("replies.sender", "username role")
       
 
     return res.status(200).json(requests);
@@ -135,9 +136,10 @@ async function getAllRequests(req, res) {
 async function getRequestById(req, res) {
   try {
     const request = await Request.findById(req.params.id)
-      .populate("createdBy", "username")
-      .populate("assignedTo", "username")
-      .populate("category", "name");
+      .populate("createdBy", "username role")
+      .populate("assignedTo", "username role")
+      .populate("category", "name")
+      .populate("replies.sender", "username role");
 
     if (!request) {
       return res.status(404).json({
@@ -157,8 +159,61 @@ async function getRequestById(req, res) {
 }
 
 
+async function replyToRequest(req,res){
+  try{
+    const { requestId } = req.params;
+    const { message, attachments = [] } = req.body;
 
-module.exports= {createRequest, updateRequest, deleteRequest, getAllRequests, getRequestById}
+    const request = await Request.findById(requestId);
+    if (!request) {
+      return res.status(404).json({
+        message: "Request not found"
+      });
+    }
+    if (!message?.trim()) {
+      return res.status(400).json({
+        message: "Please enter a message "
+      });
+    }
+
+    request.replies.push({
+      message: message?.trim(),
+      sender: req.user._id,
+      attachments
+    });
+
+    if (!request.assignedTo) {
+      request.assignedTo = req.user._id;
+    }
+
+    if (request.Status === "New") {
+      request.Status = "In progress";
+    }
+
+    await request.save();
+    await request.populate([
+      {
+        path: "replies.sender",
+        select: "username role"
+      },
+      {
+        path: "assignedTo",
+        select: "username role"
+      }
+    ]);
+    
+    return res.status(201).json({
+      message: "Reply added successfully",
+      request
+    });
+  
+
+  }catch(err){console.log(err)}
+}
+
+
+
+module.exports= {createRequest, updateRequest, deleteRequest, getAllRequests, getRequestById, replyToRequest}
 
 
 

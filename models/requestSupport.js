@@ -43,9 +43,9 @@ const requestSupportSchema = new mongoose.Schema(
             enum: ["Low", "Medium", "High", "Urgent"],
             default: "Medium"
         },
-        Status: {
+        status: {
             type: String,
-            enum: ['New', "In progress", "Resolved", "Closed"],
+            enum: ['New', "In progress","Waiting for confirmation", "Resolved", "Closed"],
             default: 'New'
         },
         attachments: {

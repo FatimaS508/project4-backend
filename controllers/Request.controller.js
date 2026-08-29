@@ -186,9 +186,7 @@ async function replyToRequest(req,res){
       request.assignedTo = req.user._id;
     }
 
-    if (request.Status === "New") {
-      request.Status = "In progress";
-    }
+    request.status = "Waiting for confirmation"
 
     await request.save();
     await request.populate([
@@ -211,9 +209,28 @@ async function replyToRequest(req,res){
   }catch(err){console.log(err)}
 }
 
+async function updateRequest(req, res) {
+  try {
+    const { status } = req.body
+    const request = await Request.findById(req.params.id)
+
+    if (!request) {
+      return res.status(404).json({message: "Request not found"})}
+
+    if (status) {request.status = status}
+
+    await request.save()
+
+    res.status(200).json(request)
+  } catch (err) {
+    res.status(500).json({message: err.message
+    })
+  }
+}
 
 
-module.exports= {createRequest, updateRequest, deleteRequest, getAllRequests, getRequestById, replyToRequest}
+
+module.exports= {createRequest, updateRequest, deleteRequest, getAllRequests, getRequestById, replyToRequest, updateRequest}
 
 
 

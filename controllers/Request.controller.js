@@ -182,8 +182,8 @@ async function replyToRequest(req,res){
       attachments
     });
 
-    if (!request.assignedTo) {
-      request.assignedTo = req.user._id;
+    if (!request.assignedTo && req.user.role === "Technician") {
+      request.assignedTo = req.user._id
     }
 
     request.status = "Waiting for confirmation"

@@ -25,7 +25,7 @@ app.use(morgan('dev'))
 // Routes
 app.use('/auth',authRoutes)
 app.use('/category', categoriesRoute)
-app.use("/requests", requestRoutes);
+app.use("/requests", requestRoutes)
 
 
 

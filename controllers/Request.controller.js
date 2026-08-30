@@ -118,7 +118,7 @@ async function getAllRequests(req, res) {
     const requests = await Request.find()
       .populate("createdBy", "username role")
       .populate("assignedTo", "username role")
-      .populate("category", "name")
+      .populate("category", "name subcategories")
       .populate("replies.sender", "username role")
       
 
@@ -138,7 +138,7 @@ async function getRequestById(req, res) {
     const request = await Request.findById(req.params.id)
       .populate("createdBy", "username role")
       .populate("assignedTo", "username role")
-      .populate("category", "name")
+      .populate("category", "name subcategories")
       .populate("replies.sender", "username role");
 
     if (!request) {
@@ -228,9 +228,36 @@ async function updateRequest(req, res) {
   }
 }
 
+async function deleteReply(req, res) {
+  try {
+    const request = await Request.findById(req.params.requestId)
+
+    const reply = request.replies.id(req.params.replyId)
+    
+
+    if (!reply) {
+      return res.status(404).json({
+        message: "Reply not found"
+      })
+    }
+    reply.deleteOne()
+    await request.save()
+
+    return res.status(200).json({
+      message: "Reply deleted successfully"
+    })
+  } catch (err) {
+    console.log(err)
+
+    return res.status(500).json({
+      message: err.message
+    })
+  }
+}
 
 
-module.exports= {createRequest, updateRequest, deleteRequest, getAllRequests, getRequestById, replyToRequest, updateRequest}
+
+module.exports= {createRequest, updateRequest, deleteRequest, getAllRequests, getRequestById, replyToRequest, updateRequest, deleteReply}
 
 
 

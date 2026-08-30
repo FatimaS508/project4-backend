@@ -13,6 +13,7 @@ router.post("/", verifyToken, requestController.createRequest);
 
 router.post('/:requestId/replies', verifyToken, requestController.replyToRequest)
 router.get('/:requestId/replies', verifyToken, requestController.replyToRequest)
+router.delete('/:requestId/replies/:replyId',verifyToken ,requestController.deleteReply)
 
 
 

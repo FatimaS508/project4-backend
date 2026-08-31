@@ -16,8 +16,4 @@ router.get('/:requestId/replies', verifyToken, requestController.replyToRequest)
 router.delete('/:requestId/replies/:replyId',verifyToken ,requestController.deleteReply)
 
 
-
-
-
-
 module.exports= router

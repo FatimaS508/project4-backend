@@ -2,7 +2,9 @@
 Government IT support System (SUPPORT)
 ## Overview
 
-This repository contains the Node.js, Express, and MongoDB backend API for the **Government IT Support System**. It includes three main models: **User**, **Category**, and **Request**, which manage employee and technician accounts, support categories and subcategories, technical requests, replies, attachments, assignments, and request statuses.
+This repository contains the backend API for a centralized government IT support system. It allows employees to submit and track technical support requests and allows technicians to review requests, communicate with employees, and manage request progress.
+
+The API is built with Node.js, Express, MongoDB, and Mongoose. It uses JSON Web Tokens for authentication and includes three main models: User, Category, and Request.
 
 
 ## Related Links
@@ -13,35 +15,86 @@ This repository contains the Node.js, Express, and MongoDB backend API for the *
 ## Technologies Used
 
 - Node.js
+
 - Express
+
 - MongoDB
+
 - Mongoose
-- JSON Web Tokens or session authentication
+
+- JSON Web Tokens (JWT)
+
 - bcrypt
+
 - dotenv
+
 - Morgan
-- Jest
-- Supertest
+
+- CORS
+- bruno api
 
 
 ## Features
 
 ## Features
 
-* User registration, login, and logout
-* JWT authentication middleware
-* Employee and technician role-based authorization
-* Ownership-based request access
-* CRUD API endpoints for users, categories, and requests
-* Support categories and subcategories
-* Request creation, assignment, updating, and deletion
-* Reply management
-* Request status tracking
-* Search and status filtering
-* MongoDB relationships using Mongoose
-* Request validation
-* Rate limiting
-* Clear error handling with appropriate HTTP status codes
+### Authentication and Users
+
+- Employee and technician registration
+
+- Secure password hashing with bcrypt
+
+- JWT-based sign-in and authentication
+
+- Protected API routes
+
+- Employee ID and department information
+
+- Employee and technician roles
+
+### Categories and Dynamic Forms
+
+- IT support categories and embedded subcategories
+
+- Descriptions for categories and subcategories
+
+- Dynamic form fields for each subcategory
+
+- Support for text, number, telephone, select, textarea, date, and file fields
+
+### Support Requests
+
+- Create, read, update support requests
+
+- Automatically generated request numbers beginning at 1001
+
+- Priority levels: Low, Medium, High, and Urgent
+
+### Request status tracking
+
+- Dynamic request details based on the selected subcategory
+
+- Image attachments stored as Base64 strings
+
+- Employee ownership through the createdBy relationship
+
+- Technician assignment through the assignedTo relationship
+
+- Retrieve only the requests created by the authenticated employee
+
+- Populate employee, technician, and category information
+
+### Replies
+
+Employees and technicians can add replies to requests
+
+Reply sender information is stored and populated
+
+Technicians can delete replies
+
+Technician replies move requests to waiting for employee confirmation
+
+Employees can confirm that an issue has been resolved
 
 
 
@@ -210,11 +263,16 @@ https://your-deployed-api.com
 
 ### Users and Authentication
 
-| Method | Endpoint            | Access        | Description           |
-| ------ | ------------------- | ------------- | --------------------- |
-| `POST` | `/api/auth/sign-up` | Public        | Register a new user   |
-| `POST` | `/api/auth/sign-in` | Public        | Sign in to an account |
-| `GET`  | `/api/auth/me`      | Authenticated | Get the current user  |
+| Field            | Type   | Rules                                              |
+| ---------------- | ------ | -------------------------------------------------- |
+| `username`       | String | Required, unique, trimmed, and lowercase           |
+| `hashedPassword` | String | Required                                           |
+| `role`           | String | `employee` or `technician`; defaults to `employee` |
+| `employeeId`     | String | Required for employees and unique                  |
+| `department`     | String | Required for employees                             |
+| `createdAt`      | Date   | Generated automatically                            |
+| `updatedAt`      | Date   | Generated automatically                            |
+
 
 ### Categories
 
@@ -225,17 +283,17 @@ https://your-deployed-api.com
 | `GET`  | `/api/categories/subcategory/:scategoryId` | Authenticated | Get one subcategory |
 
 ### Requests
-
-| Method   | Endpoint                                    | Access        | Description         |
-| -------- | ------------------------------------------- | ------------- | ------------------- |
-| `GET`    | `/api/requests`                             | Authenticated | Get all requests    |
-| `GET`    | `/api/requests/:id`                         | Authenticated | Get one request     |
-| `POST`   | `/api/requests`                             | Authenticated | Create a request    |
-| `PUT`    | `/api/requests/:id`                         | Authenticated | Update a request    |
-| `DELETE` | `/api/requests/:id`                         | Authenticated | Delete a request    |
-| `POST`   | `/api/requests/:requestId/replies`          | Authenticated | Add a reply         |
-| `GET`    | `/api/requests/:requestId/replies`          | Authenticated | Get request replies |
-| `DELETE` | `/api/requests/:requestId/replies/:replyId` | Authenticated | Delete a reply      |
+| Method   | Endpoint                                | Access        | Description                                         |
+| -------- | --------------------------------------- | ------------- | --------------------------------------------------- |
+| `GET`    | `/requests`                             | Authenticated | Get all requests for the technician interface       |
+| `GET`    | `/requests/my`                          | Authenticated | Get only requests created by the signed-in employee |
+| `GET`    | `/requests/:id`                         | Authenticated | Get one request                                     |
+| `POST`   | `/requests`                             | Authenticated | Create a new support request                        |
+| `PUT`    | `/requests/:id`                         | Authenticated | Update a request or its status                      |
+| `DELETE` | `/requests/:id`                         | Authenticated | Delete a request                                    |
+| `POST`   | `/requests/:requestId/replies`          | Authenticated | Add a reply to a request                            |
+| `GET`    | `/requests/:requestId/replies`          | Authenticated | Get the replies for a request                       |
+| `DELETE` | `/requests/:requestId/replies/:replyId` | Authenticated | Delete a reply                                      |
 
 
 ## Status Codes
@@ -267,11 +325,9 @@ Tests should use a dedicated test database or an in-memory database.
 ## Future Enhancements
 ## Future Enhancements
 
-* Upload images, documents, and voice messages
+
 * Send real-time notifications for request updates
 * Add an admin role to control technician and employees role
-* Improve the filtering feature
-* Support Arabic language
 
 
 ## Team Members
@@ -283,4 +339,4 @@ Tests should use a dedicated test database or an in-memory database.
 
 ## Credits
 
-Special thanks to **Mr. Omar** for his continuous support, patience, and guidance throughout the development of this project.
+Special thanks to **Mr. Omar Kamal** for his continuous support, patience, and guidance throughout the development of this project.

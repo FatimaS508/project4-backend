@@ -55,7 +55,7 @@ async function seedDB() {
               },
               {
                 name: "requiredPermissions",
-                label: "Required Permissions",
+                label: "Access or Permissions Needed",
                 type: "textarea",
                 required: false
               },

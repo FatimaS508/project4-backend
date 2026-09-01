@@ -50,7 +50,7 @@ const requestSupportSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ['New', "In progress","Waiting for confirmation", "Resolved"],
+            enum: ['New',"Waiting for confirmation", "Resolved"],
             default: 'New'
         },
         attachments: {

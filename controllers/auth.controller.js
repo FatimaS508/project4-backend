@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 async function signUp(req, res) {
   try {
-    const { username, password, role } = req.body;
+    const { username, password, role ,employeeId,department} = req.body;
 
     // Validation
     if (!username || !password) return res.status(400).json({message: "Username and password are required.",});
@@ -13,8 +13,11 @@ async function signUp(req, res) {
     const user = await User.create({
       username,
       hashedPassword: await bcrypt.hash(password, 12),
-      role
+      role,
+      employeeId, department
     });
+    if (role === "employee" && (!employeeId || !department)) {
+      return res.status(400).json({message: "Employee ID and department are required for employees."})}
 
     const { _id, createdAt, updatedAt } = user;
 

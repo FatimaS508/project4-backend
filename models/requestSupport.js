@@ -34,6 +34,11 @@ const replySchema = new mongoose.Schema(
 
 const requestSupportSchema = new mongoose.Schema(
     {
+       requestNumber: {
+         type: Number,
+         required: true,
+         unique: true
+       },
         title: {
             type: String,
             required: true

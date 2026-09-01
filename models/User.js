@@ -18,6 +18,28 @@ const userSchema = new mongoose.Schema(
       enum: ["employee", "technician"],
       default: "employee",
       required: true
+    },
+    employeeId: {
+      type: String,
+      required: function () {
+        return this.role === "employee";
+      },
+      unique: true,
+      trim: true
+    },
+
+    department: {
+      type: String,
+      required: function () {
+        return this.role === "employee";
+      },
+      enum: [
+        "Human Resources",
+        "Finance",
+        "Marketing",
+        "Operations",
+        "Information Technology"
+      ]
     }
   },
   { timestamps: true },

@@ -276,9 +276,11 @@ Tests should use a dedicated test database or an in-memory database.
 
 ## Team Members
 
-| Name         | GitHub           | Responsibilities       |
-| ------------ | ---------------- | ---------------------- |
-| Fatema Sami | https://github.com/FatimaS508 |    |
+| Name         | GitHub           | 
+| ------------ | ---------------- | 
+| Fatema Sami | https://github.com/FatimaS508 |
 
 
 ## Credits
+
+Special thanks to **Mr. Omar** for his continuous support, patience, and guidance throughout the development of this project.

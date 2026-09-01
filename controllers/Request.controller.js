@@ -25,7 +25,10 @@ async function createRequest(req,res) {
                 message: "The subcategory not found"
             });
         }
+      const latestRequest = await Request.findOne().sort({ requestNumber: -1 })
+      const nextRequestNumber = latestRequest?.requestNumber? latestRequest.requestNumber + 1: 1001
         const request = await Request.create({
+            requestNumber: nextRequestNumber,
             title: subcategory.name,
 
             category: categoryId,
@@ -116,10 +119,10 @@ async function deleteRequest(req, res) {
 async function getAllRequests(req, res) {
   try {
     const requests = await Request.find()
-      .populate("createdBy", "username role")
+      .populate("createdBy", "username role employeeId department")
       .populate("assignedTo", "username role")
       .populate("category", "name subcategories")
-      .populate("replies.sender", "username role")
+      .populate("replies.sender", "username role employeeId department")
       
 
     return res.status(200).json(requests);
@@ -132,14 +135,28 @@ async function getAllRequests(req, res) {
     });
   }
 }
+async function getMyRequests(req, res) {
+  try {
+    const requests = await Request.find({createdBy: req.user._id})
+      .populate("createdBy","username role employeeId department")
+      .populate("category", "name subcategories")
+      .sort({ createdAt: -1 })
+
+    return res.status(200).json(requests)
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({ message: "Failed to load your requests"
+    })
+  }
+}
 
 async function getRequestById(req, res) {
   try {
     const request = await Request.findById(req.params.id)
-      .populate("createdBy", "username role")
+      .populate("createdBy", "username role employeeId department")
       .populate("assignedTo", "username role")
       .populate("category", "name subcategories")
-      .populate("replies.sender", "username role");
+      .populate("replies.sender", "username role employeeId department");
 
     if (!request) {
       return res.status(404).json({
@@ -192,11 +209,11 @@ async function replyToRequest(req,res){
     await request.populate([
       {
         path: "replies.sender",
-        select: "username role"
+        select: "username role employeeId department"
       },
       {
         path: "assignedTo",
-        select: "username role"
+        select: "username role employeeId department"
       }
     ]);
     
@@ -257,7 +274,7 @@ async function deleteReply(req, res) {
 
 
 
-module.exports= {createRequest, updateRequest, deleteRequest, getAllRequests, getRequestById, replyToRequest, updateRequest, deleteReply}
+module.exports= {createRequest, updateRequest, deleteRequest, getAllRequests, getRequestById, replyToRequest, updateRequest, deleteReply, getMyRequests}
 
 
 

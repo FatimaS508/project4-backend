@@ -50,9 +50,13 @@ const requestSupportSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ['New',"Waiting for confirmation", "Resolved"],
+            enum: ['New',"Waiting for confirmation", "Resolved", "Rejected"],
             default: 'New'
         },
+        rejectionReason: {
+          type: String,
+           default: ""
+       },
         attachments: {
             type: [String]
         },

@@ -225,18 +225,21 @@ async function replyToRequest(req,res){
 
 async function updateRequestStatus(req, res) {
   try {
-    const { status } = req.body
+    const { status, rejectionReason } = req.body
     const request = await Request.findById(req.params.id)
 
     if (!request) {
       return res.status(404).json({message: "Request not found"})}
 
-    if (status) {request.status = status}
+
+    request.status = status
+    request.rejectionReason = rejectionReason
 
     await request.save()
 
     res.status(200).json(request)
   } catch (err) {
+    console.log(err)
     res.status(500).json({message: err.message
     })
   }

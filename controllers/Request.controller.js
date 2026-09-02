@@ -55,13 +55,10 @@ async function updateRequest(req, res) {
 
     if (!request) {
       return res.status(404).json({
-        message: "Request not found"
-      });
+        message: "Request not found"})
     }
 
-    const {
-      priority,
-      requestDetails,
+    const { priority, requestDetails,
       attachments
     } = req.body;
 
@@ -79,7 +76,7 @@ async function updateRequest(req, res) {
 
     await request.save();
 
-    return res.status(200).json(request);
+    return res.status(200).json({message: "EDIT CONTROLLER IS WORKING", request})
 
   } catch (err) {
     console.log(err);
@@ -226,7 +223,7 @@ async function replyToRequest(req,res){
   }catch(err){console.log(err)}
 }
 
-async function updateRequest(req, res) {
+async function updateRequestStatus(req, res) {
   try {
     const { status } = req.body
     const request = await Request.findById(req.params.id)
@@ -274,7 +271,7 @@ async function deleteReply(req, res) {
 
 
 
-module.exports= {createRequest, updateRequest, deleteRequest, getAllRequests, getRequestById, replyToRequest, updateRequest, deleteReply, getMyRequests}
+module.exports= {createRequest, updateRequest, deleteRequest, getAllRequests, getRequestById, replyToRequest, updateRequestStatus, deleteReply, getMyRequests}
 
 
 

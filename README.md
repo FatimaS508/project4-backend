@@ -289,7 +289,8 @@ https://your-deployed-api.com
 | `GET`    | `/requests/my`                          | Authenticated | Get only requests created by the signed-in employee |
 | `GET`    | `/requests/:id`                         | Authenticated | Get one request                                     |
 | `POST`   | `/requests`                             | Authenticated | Create a new support request                        |
-| `PUT`    | `/requests/:id`                         | Authenticated | Update a request or its status                      |
+| `PUT`    | `/requests/:id`                         | Authenticated | Update a request                      |
+| `PUT`    | `/requests/:id/status`                  | Authenticated | Update a request status                            |
 | `DELETE` | `/requests/:id`                         | Authenticated | Delete a request                                    |
 | `POST`   | `/requests/:requestId/replies`          | Authenticated | Add a reply to a request                            |
 | `GET`    | `/requests/:requestId/replies`          | Authenticated | Get the replies for a request                       |

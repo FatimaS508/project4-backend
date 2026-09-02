@@ -6,6 +6,7 @@ const requestController= require('../controllers/Request.controller')
 
 router.post('/', verifyToken, requestController.createRequest)
 router.put('/:id', verifyToken, requestController.updateRequest)
+router.put( "/:id/status", verifyToken, requestController.updateRequestStatus)
 router.delete('/:id', verifyToken, requestController.deleteRequest)
 router.get('/', verifyToken, requestController.getAllRequests)
 router.get('/my', verifyToken, requestController.getMyRequests)
